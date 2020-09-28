@@ -14,7 +14,6 @@ namespace SocialMedia.Domain.Services.Posts
         {
             _getPostsOutput = getPostsOutput;
         }
-
         public async Task<IEnumerable<Post>> GetPosts()
         {
             return await _getPostsOutput.GetPosts();

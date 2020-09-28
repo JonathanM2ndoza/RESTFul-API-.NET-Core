@@ -2,23 +2,23 @@
 using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Models.Posts;
 using SocialMedia.Infrastructure.Data;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Posts
 {
-    public class GetPostsRepository : IGetPostsOutput
+    public class GetPostRepository : IGetPostOutput
     {
+
         private readonly SocialMediaContext _socialMediaContext;
 
-        public GetPostsRepository(SocialMediaContext socialMediaContext)
+        public GetPostRepository(SocialMediaContext socialMediaContext)
         {
             _socialMediaContext = socialMediaContext;
         }
 
-        public async Task<IEnumerable<Post>> GetPosts()
+        public async Task<Post> GetPost(int Id)
         {
-            return await _socialMediaContext.Posts.ToListAsync();
+            return await _socialMediaContext.Posts.FirstOrDefaultAsync(p => p.Id == Id);
         }
     }
 }
