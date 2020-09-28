@@ -1,13 +1,15 @@
-﻿using SocialMedia.Domain.Models.Posts;
+﻿using SocialMedia.Domain.Interfaces.Output.Posts;
+using SocialMedia.Domain.Models.Posts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Posts
 {
-    public class PostRepository
+    public class GetPostsRepository : IGetPostsOutput
     {
-        public IEnumerable<Post> GetPosts()
+        public async Task<IEnumerable<Post>> GetPosts()
         {
             var posts = Enumerable.Range(1, 10).Select(x => new Post
             {
@@ -18,6 +20,7 @@ namespace SocialMedia.Infrastructure.Repositories.Posts
                 UserId = x * 2
             });
 
+            await Task.Delay(10);
             return posts;
         }
     }

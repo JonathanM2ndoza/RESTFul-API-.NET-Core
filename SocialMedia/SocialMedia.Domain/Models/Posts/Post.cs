@@ -4,7 +4,6 @@ namespace SocialMedia.Domain.Models.Posts
 {
     public class Post
     {
-
         public int PostId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
