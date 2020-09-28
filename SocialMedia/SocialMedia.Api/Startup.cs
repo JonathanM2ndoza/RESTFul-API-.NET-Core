@@ -35,6 +35,8 @@ namespace SocialMedia.Api
             services.AddTransient<IGetPostsOutput, GetPostsRepository>();
             services.AddTransient<IGetPostInput, GetPostService>();
             services.AddTransient<IGetPostOutput, GetPostRepository>();
+            services.AddTransient<ICreatePostInput, CreatePostService>();
+            services.AddTransient<ICreatePostOutput, CreatePostRepository>();
 
         }
 

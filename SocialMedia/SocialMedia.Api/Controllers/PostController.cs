@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Domain.Interfaces.Input.Posts;
+using SocialMedia.Domain.Models.Posts;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Api.Controllers
@@ -10,11 +11,13 @@ namespace SocialMedia.Api.Controllers
     {
         private readonly IGetPostsInput _getPostsInput;
         private readonly IGetPostInput _getPostInput;
+        private readonly ICreatePostInput _createPostInput;
 
-        public PostController(IGetPostsInput getPostsInput, IGetPostInput getPostInput)
+        public PostController(IGetPostsInput getPostsInput, IGetPostInput getPostInput, ICreatePostInput createPostInput)
         {
             _getPostsInput = getPostsInput;
             _getPostInput = getPostInput;
+            _createPostInput = createPostInput;
         }
 
         [HttpGet]
@@ -27,6 +30,13 @@ namespace SocialMedia.Api.Controllers
         public async Task<IActionResult> GetPost(int Id)
         {
             return Ok(await _getPostInput.GetPost(Id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePost(Post post)
+        {
+            await _createPostInput.CreatePost(post);
+            return Ok(post);
         }
     }
 }
