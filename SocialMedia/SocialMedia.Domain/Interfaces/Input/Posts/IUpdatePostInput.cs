@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace SocialMedia.Domain.Interfaces.Input.Posts
 {
-    public interface IGetPostInput
+    public interface IUpdatePostInput
     {
-        Task<Post> GetPost(int id);
+        Task<bool> UpdatePost(Post post);
     }
 }

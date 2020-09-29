@@ -51,6 +51,10 @@ namespace SocialMedia.Api
             services.AddTransient<IGetPostOutput, GetPostRepository>();
             services.AddTransient<ICreatePostInput, CreatePostService>();
             services.AddTransient<ICreatePostOutput, CreatePostRepository>();
+            services.AddTransient<IUpdatePostInput, UpdatePostService>();
+            services.AddTransient<IUpdatePostOutput, UpdatePostRepository>();
+            services.AddTransient<IDeletePostInput, DeletePostService>();
+            services.AddTransient<IDeletePostOutput, DeletePostRepository>();
 
             services.AddMvc(options =>
             {

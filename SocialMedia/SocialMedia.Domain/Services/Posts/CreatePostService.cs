@@ -7,7 +7,7 @@ namespace SocialMedia.Domain.Services.Posts
 {
     public class CreatePostService : ICreatePostInput
     {
-        private ICreatePostOutput _createPostOutput;
+        private readonly ICreatePostOutput _createPostOutput;
 
         public CreatePostService(ICreatePostOutput createPostOutput)
         {

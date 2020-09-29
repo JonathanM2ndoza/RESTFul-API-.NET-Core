@@ -13,9 +13,9 @@ namespace SocialMedia.Domain.Services.Posts
         {
             _getPostOutput = getPostOutput;
         }
-        public async Task<Post> GetPost(int Id)
+        public async Task<Post> GetPost(int id)
         {
-            return await _getPostOutput.GetPost(Id);
+            return await _getPostOutput.GetPost(id);
         }
     }
 }

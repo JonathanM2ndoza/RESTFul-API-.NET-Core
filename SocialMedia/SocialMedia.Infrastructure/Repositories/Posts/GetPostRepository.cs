@@ -16,9 +16,9 @@ namespace SocialMedia.Infrastructure.Repositories.Posts
             _socialMediaContext = socialMediaContext;
         }
 
-        public async Task<Post> GetPost(int Id)
+        public async Task<Post> GetPost(int id)
         {
-            return await _socialMediaContext.Posts.FirstOrDefaultAsync(p => p.Id == Id);
+            return await _socialMediaContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
