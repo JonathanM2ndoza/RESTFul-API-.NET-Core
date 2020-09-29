@@ -2,7 +2,7 @@
 
 namespace SocialMedia.Domain.Models.Posts
 {
-    public partial class Comment: BaseModel
+    public partial class Comment : BaseModel
     {
         public int PostId { get; set; }
         public int UserId { get; set; }

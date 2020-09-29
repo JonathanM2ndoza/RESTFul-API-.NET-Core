@@ -42,8 +42,13 @@ namespace SocialMedia.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(PostDto postDto)
         {
-            await _createPostInput.CreatePost(_mapper.Map<Post>(postDto));
-            return Ok(new ApiResponse<PostDto>(postDto));
+            var post = _mapper.Map<Post>(postDto);
+
+            await _createPostInput.CreatePost(post);
+
+            postDto = _mapper.Map<PostDto>(post);
+            var response = new ApiResponse<PostDto>(postDto);
+            return Ok(response);
         }
     }
 }

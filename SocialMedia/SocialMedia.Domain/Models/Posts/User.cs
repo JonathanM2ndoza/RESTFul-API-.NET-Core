@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SocialMedia.Domain.Models.Posts
 {
-    public partial class User: BaseModel
+    public partial class User : BaseModel
     {
         public User()
         {

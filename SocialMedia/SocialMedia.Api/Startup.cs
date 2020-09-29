@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using SocialMedia.Domain.Interfaces.Input.Posts;
 using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Services.Posts;
 using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Filters;
 using SocialMedia.Infrastructure.Repositories.Posts;
 using System;
 
@@ -33,7 +35,10 @@ namespace SocialMedia.Api
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            });
+            }).ConfigureApiBehaviorOptions(options =>
+            {
+                //options.SuppressModelStateInvalidFilter = true;
+            }); ;
 
             // Register connection to BD
             services.AddDbContext<SocialMediaContext>(options =>
@@ -46,6 +51,14 @@ namespace SocialMedia.Api
             services.AddTransient<IGetPostOutput, GetPostRepository>();
             services.AddTransient<ICreatePostInput, CreatePostService>();
             services.AddTransient<ICreatePostOutput, CreatePostRepository>();
+
+            services.AddMvc(options =>
+            {
+                // options.Filters.Add<ValidationFilter>();
+            }).AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            }); ;
 
         }
 
