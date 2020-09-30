@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMedia.Domain.Models.Comments;
 using SocialMedia.Domain.Models.Posts;
+using SocialMedia.Domain.Models.Users;
 using SocialMedia.Infrastructure.Data.Configurations;
 
 namespace SocialMedia.Infrastructure.Data

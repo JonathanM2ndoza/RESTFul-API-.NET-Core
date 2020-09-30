@@ -1,4 +1,4 @@
-﻿namespace SocialMedia.Domain.Models.Posts
+﻿namespace SocialMedia.Domain.Models.Custom
 {
     public abstract class BaseModel
     {

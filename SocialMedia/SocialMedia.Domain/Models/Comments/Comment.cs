@@ -1,6 +1,9 @@
-﻿using System;
+﻿using SocialMedia.Domain.Models.Custom;
+using SocialMedia.Domain.Models.Posts;
+using SocialMedia.Domain.Models.Users;
+using System;
 
-namespace SocialMedia.Domain.Models.Posts
+namespace SocialMedia.Domain.Models.Comments
 {
     public partial class Comment : BaseModel
     {

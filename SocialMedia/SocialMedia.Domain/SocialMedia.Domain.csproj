@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <Folder Include="Enumerations\" />
-    <Folder Include="Exceptions\" />
-    <Folder Include="Models\Custom\" />
+    <Folder Include="Interfaces\Input\Users\" />
+    <Folder Include="Services\Users\" />
   </ItemGroup>
 
 </Project>

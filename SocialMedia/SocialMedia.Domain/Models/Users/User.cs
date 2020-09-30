@@ -1,7 +1,10 @@
-﻿using System;
+﻿using SocialMedia.Domain.Models.Comments;
+using SocialMedia.Domain.Models.Custom;
+using SocialMedia.Domain.Models.Posts;
+using System;
 using System.Collections.Generic;
 
-namespace SocialMedia.Domain.Models.Posts
+namespace SocialMedia.Domain.Models.Users
 {
     public partial class User : BaseModel
     {
