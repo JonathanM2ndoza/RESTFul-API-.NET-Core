@@ -1,22 +1,24 @@
 ﻿using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Models.Posts;
 using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Posts
 {
     public class UpdatePostRepository : IUpdatePostOutput
     {
-        private readonly SocialMediaContext _socialMediaContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdatePostRepository(SocialMediaContext socialMediaContext)
+        public UpdatePostRepository(IUnitOfWork unitOfWork)
         {
-            _socialMediaContext = socialMediaContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task UpdatePost(Post post)
         {
-            await _socialMediaContext.SaveChangesAsync();
+            _unitOfWork.PostRepository.Update(post);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

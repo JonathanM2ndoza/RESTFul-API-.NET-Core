@@ -11,7 +11,8 @@ using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Interfaces.Output.Users;
 using SocialMedia.Domain.Services.Posts;
 using SocialMedia.Infrastructure.Data;
-using SocialMedia.Infrastructure.Filters;
+using SocialMedia.Infrastructure.Repositories;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using SocialMedia.Infrastructure.Repositories.Posts;
 using SocialMedia.Infrastructure.Repositories.Users;
 using System;
@@ -57,7 +58,11 @@ namespace SocialMedia.Api
             services.AddTransient<IUpdatePostOutput, UpdatePostRepository>();
             services.AddTransient<IDeletePostInput, DeletePostService>();
             services.AddTransient<IDeletePostOutput, DeletePostRepository>();
+
             services.AddTransient<IGetUserOutput, GetUserRepository>();
+
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddMvc(options =>
             {

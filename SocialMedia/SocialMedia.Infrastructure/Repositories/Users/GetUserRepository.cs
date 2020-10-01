@@ -1,23 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SocialMedia.Domain.Interfaces.Output.Users;
+﻿using SocialMedia.Domain.Interfaces.Output.Users;
 using SocialMedia.Domain.Models.Users;
-using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Users
 {
     public class GetUserRepository : IGetUserOutput
     {
-        private readonly SocialMediaContext _socialMediaContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetUserRepository(SocialMediaContext socialMediaContext)
+        public GetUserRepository(IUnitOfWork unitOfWork)
         {
-            _socialMediaContext = socialMediaContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<User> GetUser(int id)
         {
-            return await _socialMediaContext.Users.FirstOrDefaultAsync(p => p.Id == id);
+            return await _unitOfWork.UserRepository.GetById(id);
         }
     }
 }

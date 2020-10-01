@@ -1,27 +1,26 @@
 ﻿using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Models.Posts;
-using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Posts
 {
     public class DeletePostRepository : IDeletePostOutput
     {
+        private readonly IUnitOfWork _unitOfWork;
 
-        private readonly SocialMediaContext _socialMediaContext;
-
-        public DeletePostRepository(SocialMediaContext socialMediaContext)
+        public DeletePostRepository(IUnitOfWork unitOfWork)
         {
-            _socialMediaContext = socialMediaContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> DeletePost(int id)
         {
-            Post post = await _socialMediaContext.Posts.FindAsync(id);
+            Post post = await _unitOfWork.PostRepository.GetById(id);
             if (post != null)
             {
-                _socialMediaContext.Remove(post);
-                await _socialMediaContext.SaveChangesAsync();
+                _unitOfWork.PostRepository.Delete(post);
+                await _unitOfWork.SaveChangesAsync();
                 return true;
             }
             return false;

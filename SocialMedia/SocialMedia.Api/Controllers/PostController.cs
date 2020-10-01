@@ -34,9 +34,9 @@ namespace SocialMedia.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts()
+        public IActionResult GetPosts()
         {
-            IEnumerable<PostDto> postDtos = _mapper.Map<IEnumerable<PostDto>>(await _getPostsInput.GetPosts());
+            IEnumerable<PostDto> postDtos = _mapper.Map<IEnumerable<PostDto>>(_getPostsInput.GetPosts());
             ApiResponse<IEnumerable<PostDto>> apiResponse = new ApiResponse<IEnumerable<PostDto>>(postDtos);
             return Ok(apiResponse);
         }

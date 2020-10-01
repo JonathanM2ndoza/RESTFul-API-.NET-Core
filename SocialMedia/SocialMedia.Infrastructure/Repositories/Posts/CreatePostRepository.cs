@@ -1,23 +1,23 @@
 ﻿using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Models.Posts;
-using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Posts
 {
     public class CreatePostRepository : ICreatePostOutput
     {
-        private readonly SocialMediaContext _socialMediaContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreatePostRepository(SocialMediaContext socialMediaContext)
+        public CreatePostRepository(IUnitOfWork unitOfWork)
         {
-            _socialMediaContext = socialMediaContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreatePost(Post post)
         {
-            _socialMediaContext.Posts.Add(post);
-            await _socialMediaContext.SaveChangesAsync();
+            await _unitOfWork.PostRepository.Add(post);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

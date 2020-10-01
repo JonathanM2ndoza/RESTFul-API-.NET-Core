@@ -1,24 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SocialMedia.Domain.Interfaces.Output.Posts;
+﻿using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Models.Posts;
-using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories.Posts
 {
     public class GetPostsRepository : IGetPostsOutput
     {
-        private readonly SocialMediaContext _socialMediaContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetPostsRepository(SocialMediaContext socialMediaContext)
+        public GetPostsRepository(IUnitOfWork unitOfWork)
         {
-            _socialMediaContext = socialMediaContext;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Post>> GetPosts()
+        public IEnumerable<Post> GetPosts()
         {
-            return await _socialMediaContext.Posts.ToListAsync();
+            return _unitOfWork.PostRepository.GetAll();
         }
     }
 }
