@@ -2,20 +2,11 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SocialMedia.Domain.Interfaces.Input.Posts;
-using SocialMedia.Domain.Interfaces.Output.Posts;
-using SocialMedia.Domain.Interfaces.Output.Users;
-using SocialMedia.Domain.Services.Posts;
-using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Extensions;
 using SocialMedia.Infrastructure.Filters;
-using SocialMedia.Infrastructure.Repositories;
-using SocialMedia.Infrastructure.Repositories.Interfaces;
-using SocialMedia.Infrastructure.Repositories.Posts;
-using SocialMedia.Infrastructure.Repositories.Users;
 using System;
 
 namespace SocialMedia.Api
@@ -45,29 +36,10 @@ namespace SocialMedia.Api
             }).ConfigureApiBehaviorOptions(options =>
             {
                 //options.SuppressModelStateInvalidFilter = true;
-            }); ;
+            });
 
-            // Register connection to BD
-            services.AddDbContext<SocialMediaContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SocialMedia")));
-
-            // Register Dependency
-            services.AddTransient<IGetPostsInput, GetPostsService>();
-            services.AddTransient<IGetPostsOutput, GetPostsRepository>();
-            services.AddTransient<IGetPostInput, GetPostService>();
-            services.AddTransient<IGetPostOutput, GetPostRepository>();
-            services.AddTransient<ICreatePostInput, CreatePostService>();
-            services.AddTransient<ICreatePostOutput, CreatePostRepository>();
-            services.AddTransient<IUpdatePostInput, UpdatePostService>();
-            services.AddTransient<IUpdatePostOutput, UpdatePostRepository>();
-            services.AddTransient<IDeletePostInput, DeletePostService>();
-            services.AddTransient<IDeletePostOutput, DeletePostRepository>();
-            services.AddTransient<IGetPostsByUserOutput, GetPostsByUserRepository>();
-           
-            services.AddTransient<IGetUserOutput, GetUserRepository>();
-
-            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddDbContexts(Configuration);
+            services.AddServices();
 
             services.AddMvc(options =>
             {
