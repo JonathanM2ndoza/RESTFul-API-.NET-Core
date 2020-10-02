@@ -11,6 +11,7 @@ using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Interfaces.Output.Users;
 using SocialMedia.Domain.Services.Posts;
 using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Filters;
 using SocialMedia.Infrastructure.Repositories;
 using SocialMedia.Infrastructure.Repositories.Interfaces;
 using SocialMedia.Infrastructure.Repositories.Posts;
@@ -34,7 +35,10 @@ namespace SocialMedia.Api
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers().AddNewtonsoftJson(options =>
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+            }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
@@ -58,7 +62,8 @@ namespace SocialMedia.Api
             services.AddTransient<IUpdatePostOutput, UpdatePostRepository>();
             services.AddTransient<IDeletePostInput, DeletePostService>();
             services.AddTransient<IDeletePostOutput, DeletePostRepository>();
-
+            services.AddTransient<IGetPostsByUserOutput, GetPostsByUserRepository>();
+           
             services.AddTransient<IGetUserOutput, GetUserRepository>();
 
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
