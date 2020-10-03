@@ -4,7 +4,9 @@ using SocialMedia.Api.Responses;
 using SocialMedia.Domain.DTOs.Posts;
 using SocialMedia.Domain.Interfaces.Input.Posts;
 using SocialMedia.Domain.Models.Posts;
+using SocialMedia.Domain.Models.QueryFilters;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SocialMedia.Api.Controllers
@@ -33,10 +35,12 @@ namespace SocialMedia.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public IActionResult GetPosts()
+        [HttpGet(Name = nameof(GetPosts))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<IEnumerable<PostDto>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetPosts([FromQuery] PostQueryFilter postQueryFilter)
         {
-            IEnumerable<PostDto> postDtos = _mapper.Map<IEnumerable<PostDto>>(_getPostsInput.GetPosts());
+            IEnumerable<PostDto> postDtos = _mapper.Map<IEnumerable<PostDto>>(_getPostsInput.GetPosts(postQueryFilter));
             ApiResponse<IEnumerable<PostDto>> apiResponse = new ApiResponse<IEnumerable<PostDto>>(postDtos);
             return Ok(apiResponse);
         }
