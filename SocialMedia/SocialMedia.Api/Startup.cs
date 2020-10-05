@@ -40,6 +40,7 @@ namespace SocialMedia.Api
 
             services.AddDbContexts(Configuration);
             services.AddServices();
+            services.AddOptions(Configuration);
 
             services.AddMvc(options =>
             {

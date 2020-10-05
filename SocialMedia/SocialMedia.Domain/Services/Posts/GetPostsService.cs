@@ -1,5 +1,7 @@
-﻿using SocialMedia.Domain.Interfaces.Input.Posts;
+﻿using Microsoft.Extensions.Options;
+using SocialMedia.Domain.Interfaces.Input.Posts;
 using SocialMedia.Domain.Interfaces.Output.Posts;
+using SocialMedia.Domain.Models.Custom;
 using SocialMedia.Domain.Models.Posts;
 using SocialMedia.Domain.Models.QueryFilters;
 using System.Collections.Generic;
@@ -10,14 +12,19 @@ namespace SocialMedia.Domain.Services.Posts
     public class GetPostsService : IGetPostsInput
     {
         private readonly IGetPostsOutput _getPostsOutput;
+        private readonly PaginationOptions _paginationOptions;
 
-        public GetPostsService(IGetPostsOutput getPostsOutput)
+        public GetPostsService(IGetPostsOutput getPostsOutput, IOptions<PaginationOptions> options)
         {
             _getPostsOutput = getPostsOutput;
+            _paginationOptions = options.Value;
         }
-        public IEnumerable<Post> GetPosts(PostQueryFilter postQueryFilter)
+        public PagedList<Post> GetPosts(PostQueryFilter postQueryFilter)
         {
             IEnumerable<Post> posts = _getPostsOutput.GetPosts();
+
+            postQueryFilter.PageNumber = postQueryFilter.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : postQueryFilter.PageNumber;
+            postQueryFilter.PageSize = postQueryFilter.PageSize == 0 ? _paginationOptions.DefaultPageSize : postQueryFilter.PageSize;
 
             if (postQueryFilter.UserId != null)
             {
@@ -34,7 +41,7 @@ namespace SocialMedia.Domain.Services.Posts
                 posts = posts.Where(x => x.Description.ToLower().Contains(postQueryFilter.Description.ToLower()));
             }
 
-            return posts;
+            return PagedList<Post>.Create(posts, postQueryFilter.PageNumber, postQueryFilter.PageSize);
         }
     }
 }

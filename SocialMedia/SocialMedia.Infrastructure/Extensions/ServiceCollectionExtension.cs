@@ -1,15 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SocialMedia.Domain.Interfaces.Input.Posts;
 using SocialMedia.Domain.Interfaces.Output.Posts;
 using SocialMedia.Domain.Interfaces.Output.Users;
+using SocialMedia.Domain.Models.Custom;
 using SocialMedia.Domain.Services.Posts;
 using SocialMedia.Infrastructure.Data;
 using SocialMedia.Infrastructure.Repositories;
 using SocialMedia.Infrastructure.Repositories.Interfaces;
 using SocialMedia.Infrastructure.Repositories.Posts;
 using SocialMedia.Infrastructure.Repositories.Users;
+using SocialMedia.Infrastructure.Services;
 
 namespace SocialMedia.Infrastructure.Extensions
 {
@@ -24,13 +27,13 @@ namespace SocialMedia.Infrastructure.Extensions
             return services;
         }
 
-        /*public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<PaginationOptions>(options => configuration.GetSection("Pagination").Bind(options));
-            services.Configure<PasswordOptions>(options => configuration.GetSection("PasswordOptions").Bind(options));
+            //services.Configure<PasswordOptions>(options => configuration.GetSection("PasswordOptions").Bind(options));
 
             return services;
-        }*/
+        }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
@@ -51,6 +54,14 @@ namespace SocialMedia.Infrastructure.Extensions
 
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IUriService>(provider =>
+            {
+                var accesor = provider.GetRequiredService<IHttpContextAccessor>();
+                var request = accesor.HttpContext.Request;
+                var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(absoluteUri);
+            });
 
             return services;
         }

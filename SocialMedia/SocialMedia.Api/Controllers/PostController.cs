@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Api.Responses;
 using SocialMedia.Domain.DTOs.Posts;
 using SocialMedia.Domain.Interfaces.Input.Posts;
+using SocialMedia.Domain.Models.Custom;
 using SocialMedia.Domain.Models.Posts;
 using SocialMedia.Domain.Models.QueryFilters;
+using SocialMedia.Infrastructure.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -22,10 +24,11 @@ namespace SocialMedia.Api.Controllers
         private readonly IDeletePostInput _deletePostInput;
 
         private readonly IMapper _mapper;
+        private readonly IUriService _uriService;
 
         public PostController(IGetPostsInput getPostsInput, IGetPostInput getPostInput,
                               ICreatePostInput createPostInput, IUpdatePostInput updatePostInput,
-                              IDeletePostInput deletePostInput, IMapper mapper)
+                              IDeletePostInput deletePostInput, IMapper mapper, IUriService uriService)
         {
             _getPostsInput = getPostsInput;
             _getPostInput = getPostInput;
@@ -33,6 +36,7 @@ namespace SocialMedia.Api.Controllers
             _updatePostInput = updatePostInput;
             _deletePostInput = deletePostInput;
             _mapper = mapper;
+            _uriService = uriService;
         }
 
         [HttpGet(Name = nameof(GetPosts))]
@@ -40,8 +44,27 @@ namespace SocialMedia.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetPosts([FromQuery] PostQueryFilter postQueryFilter)
         {
-            IEnumerable<PostDto> postDtos = _mapper.Map<IEnumerable<PostDto>>(_getPostsInput.GetPosts(postQueryFilter));
-            ApiResponse<IEnumerable<PostDto>> apiResponse = new ApiResponse<IEnumerable<PostDto>>(postDtos);
+            PagedList<Post> posts = _getPostsInput.GetPosts(postQueryFilter);
+            IEnumerable<PostDto> postDtos = _mapper.Map<IEnumerable<PostDto>>(posts);
+
+            var metadata = new Metadata
+            {
+                TotalCount = posts.TotalCount,
+                PageSize = posts.PageSize,
+                CurrentPage = posts.CurrentPage,
+                TotalPages = posts.TotalPages,
+                HasNextPage = posts.HasNextPage,
+                HasPreviousPage = posts.HasPreviousPage,
+                NextPageUrl = _uriService.GetPostPaginationUri(postQueryFilter, Url.RouteUrl(nameof(GetPosts))).ToString(),
+                PreviousPageUrl = _uriService.GetPostPaginationUri(postQueryFilter, Url.RouteUrl(nameof(GetPosts))).ToString()
+            };
+
+            ApiResponse<IEnumerable<PostDto>> apiResponse = new ApiResponse<IEnumerable<PostDto>>(postDtos)
+            {
+                Meta = metadata
+            };
+
+            //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             return Ok(apiResponse);
         }
 
